@@ -1,8 +1,15 @@
-FROM    php:5.5-apache
+FROM    php:5.5
 MAINTAINER Jakub Piasecki <jakub@nymedia.no>
 
-RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y wget unzip
-RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y openssh-server supervisor
+RUN DEBIAN_FRONTEND=noninteractive apt-get update &&  apt-get -y install wget unzip
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install openssh-server supervisor
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install apache2
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install php5-gd
+#RUN DEBIAN_FRONTEND=noninteractive apt-get -y install php5-intl
+#RUN DEBIAN_FRONTEND=noninteractive apt-get -y install php5-curl
+#RUN DEBIAN_FRONTEND=noninteractive apt-get -y install php5-imap
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install php5-mysql
+#RUN DEBIAN_FRONTEND=noninteractive apt-get -y install libapache2-mod-php5
 RUN mkdir -p /var/lock/apache2 /var/run/apache2 /var/run/sshd /var/log/supervisor
 
 # Prepare volumes
@@ -24,6 +31,10 @@ RUN curl -sS https://getcomposer.org/installer | php \
   && ln -s /usr/local/src/drush/drush /usr/bin/drush
 
 COPY ./conf/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+#RUN mv /etc/apache2/apache2.conf /etc/apache2/apache2.conf.php
+#RUN mv /etc/apache2/apache2.conf.dist /etc/apache2/apache2.conf
+#RUN mv /etc/apache2/mods-available/php5.load /etc/apache2/mods-available/php5.load.bak
+#RUN a2enmod php5
 
 EXPOSE 22 80
 CMD ["/usr/bin/supervisord"]
