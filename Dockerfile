@@ -11,7 +11,7 @@ VOLUME ['/application/public']
 VOLUME ['/application/private']
 
 # apache2 config
-COPY ./environment/apache/drupal.conf /etc/apache2/sites-available/
+COPY ./conf/drupal.conf /etc/apache2/sites-available/
 RUN a2enmod rewrite \
  && a2ensite drupal \
  && a2dissite 000-default
@@ -23,7 +23,7 @@ RUN curl -sS https://getcomposer.org/installer | php \
   && cd /usr/local/src/drush && composer install \
   && ln -s /usr/local/src/drush/drush /usr/bin/drush
 
-COPY ./environment/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY ./conf/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 EXPOSE 22 80
 CMD ["/usr/bin/supervisord"]
