@@ -30,7 +30,16 @@ RUN cd /home \
   && composer global require drush/drush:dev-master \
   && echo 'export PATH="$HOME/.composer/vendor/bin:$PATH"' >> ~/.bashrc
 
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install git
+
+# RUN cd /home && git clone https://github.com/drush-ops/drush.git drush && cd drush && composer install && echo 'export PS1=$PATH:/home/drush/' >> ~/.bashrc
+
+ENV DRUPAL_DB drupal
+ENV DRUPAL_NAME drupal
+ENV DRUPAL_PASSWORD drupal
+
 COPY ./conf/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY ./conf/install-drupal.sh /root/install-drupal.sh
 
 EXPOSE 22 80
 CMD ["/usr/bin/supervisord"]
