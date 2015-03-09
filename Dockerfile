@@ -36,6 +36,8 @@ ENV DRUPAL_USER drupal
 ENV DRUPAL_PASSWORD drupal
 ENV DRUPAL_PROFILE minimal
 ENV DRUPAL_SUBDIR default
+ENV METHOD existing
+ENV SYNC_SOURCE staging
 
 COPY ./conf/install-fresh-drupal.sh /root/install-fresh-drupal.sh
 COPY ./conf/install-existing-drupal.sh /root/install-existing-drupal.sh
@@ -44,16 +46,18 @@ COPY ./conf/drupal-install.sh /root/drupal-install.sh
 COPY ./conf/db-create.sh /root/db-create.sh
 COPY ./conf/db-create-user.sh /root/db-create-user.sh
 COPY ./conf/db-grant-permission.sh /root/db-grant-permission.sh
+COPY ./conf/start.sh /root/start.sh
 RUN chmod u+x /root/install-fresh-drupal.sh \
   && chmod u+x /root/install-existing-drupal.sh \
   && chmod u+x /root/drupal-download.sh \
   && chmod u+x /root/drupal-install.sh \
   && chmod u+x /root/db-create.sh \
   && chmod u+x /root/db-create-user.sh \
-  && chmod u+x /root/db-grant-permission.sh
-
+  && chmod u+x /root/db-grant-permission.sh \
+  && chmod u+x /root/start.sh
+RUN mkdir /root/.drush && ln -s /application/drush/drushrc.php /root/.drush/drushrc.php
 COPY ./conf/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 EXPOSE 22 80
 
-CMD ["/usr/bin/supervisord"]
+CMD ["/bin/bash", "/root/start.sh"]
