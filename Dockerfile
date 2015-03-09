@@ -14,9 +14,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get -y install php5
 RUN mkdir -p /var/lock/apache2 /var/run/apache2 /var/run/sshd /var/log/supervisor
 
 # Prepare volumes
-VOLUME ['/application']
-VOLUME ['/application/public']
-VOLUME ['/application/private']
+VOLUME ["/application", "/application/public", "/application/private"]
 
 # apache2 config
 COPY ./conf/drupal.conf /etc/apache2/sites-available/
