@@ -36,7 +36,8 @@ ENV DRUPAL_USER drupal
 ENV DRUPAL_PASSWORD drupal
 ENV DRUPAL_PROFILE minimal
 ENV DRUPAL_SUBDIR default
-ENV METHOD existing
+ENV DRUPAL_MAJOR_VERSION 7
+ENV METHOD auto
 ENV SYNC_SOURCE staging
 
 COPY ./conf/install-fresh-drupal.sh /root/install-fresh-drupal.sh
