@@ -38,7 +38,6 @@ ENV DRUPAL_PROFILE minimal
 ENV DRUPAL_SUBDIR default
 ENV DRUPAL_MAJOR_VERSION 7
 ENV METHOD auto
-ENV SYNC_SOURCE staging
 ENV MYSQL_HOST_NAME mysql
 
 COPY ./conf/install-fresh-drupal.sh /root/install-fresh-drupal.sh
