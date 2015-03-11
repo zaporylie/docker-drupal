@@ -9,21 +9,21 @@ if [ "${METHOD}" = "auto" ]; then
 
   echo "Method: auto"
 
-  if [[ ! -f /application/drupal/index.php ]]; then
+  if [[ ! -f /app/drupal/index.php ]]; then
     echo "Missing drupal"
     source /root/drupal-download.sh
   fi
 
-  if [[ ! -f /application/drupal/sites/${DRUPAL_SUBDIR}/settings.php ]]; then
+  if [[ ! -f /app/drupal/sites/${DRUPAL_SUBDIR}/settings.php ]]; then
 
     echo "Missing settings file"
 
-    mysql -h${MYSQL_HOST_NAME} -u${DRUPAL_USER} -p${DRUPAL_PASSWORD} -e "use ${DRUPAL_DB}; SELECT 0 FROM ${DRUPAL_DB_PREFIX}node LIMIT 1;"
+    mysql -h${MYSQL_HOST_NAME} -u${DRUPAL_DB_USER} -p${DRUPAL_DB_PASSWORD} -e "use ${DRUPAL_DB}; SELECT 0 FROM ${DRUPAL_DB_PREFIX}node LIMIT 1;"
     if [ $? -eq 0 ]; then
 
       echo "Create settings file for existing database"
-      cp /application/drupal/sites/${DRUPAL_SUBDIR}/default.settings.php /application/drupal/sites/${DRUPAL_SUBDIR}/settings.php
-      cd /application/drupal && drush eval "include DRUPAL_ROOT.'/includes/install.inc'; include DRUPAL_ROOT.'/includes/update.inc'; \$db['databases']['value'] = update_parse_db_url('mysql://${DRUPAL_USER}:${DRUPAL_PASSWORD}@${MYSQL_HOST_NAME}/${DRUPAL_DB}', '${DRUPAL_DB_PREFIX}'); drupal_rewrite_settings(\$db, '${DRUPAL_DB_PREFIX}');"
+      cp /app/drupal/sites/${DRUPAL_SUBDIR}/default.settings.php /app/drupal/sites/${DRUPAL_SUBDIR}/settings.php
+      cd /app/drupal && drush eval "include DRUPAL_ROOT.'/includes/install.inc'; include DRUPAL_ROOT.'/includes/update.inc'; \$db['databases']['value'] = update_parse_db_url('mysql://${DRUPAL_DB_USER}:${DRUPAL_DB_PASSWORD}@${MYSQL_HOST_NAME}/${DRUPAL_DB}', '${DRUPAL_DB_PREFIX}'); drupal_rewrite_settings(\$db, '${DRUPAL_DB_PREFIX}');"
       export METHOD_AUTO_RESULT=settings_updated
     
     else
@@ -38,7 +38,7 @@ if [ "${METHOD}" = "auto" ]; then
   else
 
     echo "Settings file exist"
-    if [ "$(cd /application/drupal && drush st | grep 'Connected' | wc -l)" == "1" ]; then
+    if [ "$(cd /app/drupal && drush st | grep 'Connected' | wc -l)" == "1" ]; then
 
       echo "Already running"
       export METHOD_AUTO_RESULT=enabled
@@ -46,17 +46,17 @@ if [ "${METHOD}" = "auto" ]; then
     else
 
       echo "..but doesn't work"
-      mysql -h${MYSQL_HOST_NAME} -u${DRUPAL_USER} -p${DRUPAL_PASSWORD} -e "use ${DRUPAL_DB}; SELECT 0 FROM ${DRUPAL_DB_PREFIX}node LIMIT 1;"
+      mysql -h${MYSQL_HOST_NAME} -u${DRUPAL_DB_USER} -p${DRUPAL_DB_PASSWORD} -e "use ${DRUPAL_DB}; SELECT 0 FROM ${DRUPAL_DB_PREFIX}node LIMIT 1;"
       if [ $? -eq 0 ]; then
 
         echo "Update settings file"
-        cd /application/drupal && drush eval "include DRUPAL_ROOT.'/includes/install.inc'; include DRUPAL_ROOT.'/includes/update.inc'; \$db['databases']['value'] = update_parse_db_url('mysql://${DRUPAL_USER}:${DRUPAL_PASSWORD}@${MYSQL_HOST_NAME}/${DRUPAL_DB}', '${DRUPAL_DB_PREFIX}'); drupal_rewrite_settings(\$db, '${DRUPAL_DB_PREFIX}');"
+        cd /app/drupal && drush eval "include DRUPAL_ROOT.'/includes/install.inc'; include DRUPAL_ROOT.'/includes/update.inc'; \$db['databases']['value'] = update_parse_db_url('mysql://${DRUPAL_DB_USER}:${DRUPAL_DB_PASSWORD}@${MYSQL_HOST_NAME}/${DRUPAL_DB}', '${DRUPAL_DB_PREFIX}'); drupal_rewrite_settings(\$db, '${DRUPAL_DB_PREFIX}');"
         export METHOD_AUTO_RESULT=settings_updated
 
       else
 
         echo "Install brand new Drupal"
-        cp -f /application/drupal/sites/${DRUPAL_SUBDIR}/default.settings.php /application/drupal/sites/${DRUPAL_SUBDIR}/settings.php
+        cp -f /app/drupal/sites/${DRUPAL_SUBDIR}/default.settings.php /app/drupal/sites/${DRUPAL_SUBDIR}/settings.php
         source /root/db-create.sh
         source /root/db-grant-permission.sh
         source /root/drupal-install.sh
@@ -67,7 +67,7 @@ if [ "${METHOD}" = "auto" ]; then
   fi
 fi
 
-chown -R www-data:www-data /application/drupal/sites/${DRUPAL_SUBDIR}/files
+chown -R www-data:www-data /app/drupal/sites/${DRUPAL_SUBDIR}/files
 
 if [[ -f /root/post-install.sh ]]; then
   source /root/post-install.sh
