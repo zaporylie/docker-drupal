@@ -2,7 +2,33 @@ Drupal Docker Image
 =============================
 [![nodesource/node](http://dockeri.co/image/zaporylie/drupal)](https://registry.hub.docker.com/u/zaporylie/drupal/)
 
-## dependencies:
+## How to run this container
+````
+docker run \
+  --name <drupal> \
+  --link <mysql_container_name_or_id>:mysql \
+  -d \
+  -P \
+  zaporylie/drupal
+````
+## Configuration
+
+| ENNVIRONMENTAL VARIABLE  |  DEFAULT VALUE |
+|:-:|:-:|
+| DRUPAL_DB | drupal |
+| DRUPAL_DB_USER | drupal |
+| DRUPAL_DB_PASSWORD | drupal |
+| DRUPAL_PROFILE | minimal |
+| DRUPAL_SUBDIR | default |
+| DRUPAL_MAJOR_VERSION | 7 |
+| DRUPAL_DOWNLOAD_METHOD | drush |
+| METHOD | auto |
+| MYSQL_HOST_NAME | mysql |
+
+## Dependencies:
+
+You need to have mysql in separate container(s):
+
 ````
 docker run \
   --name mysql_data \
@@ -17,21 +43,4 @@ docker run \
   -e MYSQL_ROOT_PASSWORD=<mysecretpassword> \
   --volumes-from mysql_data \
   -d mysql:5.5
-````
-
-## How to run it?
-````
-docker run \
-  --name drupal \
-  --link <mysql_container_name_or_id>:mysql \
-  -d \
-  -P \ 
-  -e DRUPAL_USER=drupal \
-  -e DRUPAL_PASSWORD=drupal \
-  -e DRUPAL_PROFILE=minimal \
-  -e DRUPAL_SUBDIR=default \
-  -e DRUPAL_DB=drupal \
-  -e METHOD=auto \
-  -e MYSQL_HOST_NAME=auto \
-  zaporylie/drupal
 ````
