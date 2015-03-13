@@ -6,6 +6,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get -y install openssh-
 COPY ./conf/drupal-download.sh /root/drupal-download.sh
 COPY ./conf/drupal-install.sh /root/drupal-install.sh
 COPY ./conf/db-create.sh /root/db-create.sh
+COPY ./conf/db-wait.sh /root/db-wait.sh
 COPY ./conf/db-create-user.sh /root/db-create-user.sh
 COPY ./conf/db-grant-permission.sh /root/db-grant-permission.sh
 COPY ./conf/start.sh /root/start.sh
@@ -28,6 +29,7 @@ RUN a2enmod rewrite \
  && chmod u+x /root/drupal-download.sh \
  && chmod u+x /root/drupal-install.sh \
  && chmod u+x /root/db-create.sh \
+ && chmod u+x /root/db-wait.sh \
  && chmod u+x /root/db-create-user.sh \
  && chmod u+x /root/db-grant-permission.sh \
  && chmod u+x /root/start.sh \
