@@ -22,6 +22,8 @@ docker run \
 | DRUPAL_SUBDIR | default |
 | DRUPAL_MAJOR_VERSION | 7 |
 | DRUPAL_DOWNLOAD_METHOD | drush |
+| DRUPAL_GIT_BRANCH | 7.x |
+| DRUPAL_GIT_DEPTH | 1 |
 | METHOD | auto |
 | MYSQL_HOST_NAME | mysql |
 
