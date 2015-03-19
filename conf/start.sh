@@ -10,6 +10,9 @@ if [ "${METHOD}" = "auto" ]; then
 
   echo "Method: auto"
 
+  echo "Wait for MySQL"
+  source /root/db-wait.sh
+  
   if [ ! -d /app/drupal ] || [ "$(cd /app/drupal/ && drush st | grep 'Drupal version' | wc -l)" = "0"  ]; then
     echo "Missing drupal"
     source /root/drupal-download.sh
