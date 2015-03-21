@@ -1,19 +1,11 @@
 FROM tutum/apache-php
 MAINTAINER Jakub Piasecki <jakub@piaseccy.pl>
 
-RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get -y install openssh-server supervisor php5-mysql mysql-client git
+# /app was user by tutum/apache-php image
+RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get -y install openssh-server supervisor php5-mysql mysql-client git \
+  && rm -rf /app
 
-COPY ./conf/drupal-download.sh /root/drupal-download.sh
-COPY ./conf/drupal-install.sh /root/drupal-install.sh
-COPY ./conf/db-create.sh /root/db-create.sh
-COPY ./conf/db-wait.sh /root/db-wait.sh
-COPY ./conf/db-create-user.sh /root/db-create-user.sh
-COPY ./conf/db-grant-permission.sh /root/db-grant-permission.sh
-COPY ./conf/start.sh /root/start.sh
-COPY ./conf/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-COPY ./conf/drupal.conf /etc/apache2/sites-available/
-
-RUN rm -rf /app
+COPY ./conf/* /root/
 
 # Prepare volumes
 VOLUME ["/app"]
@@ -33,20 +25,22 @@ RUN a2enmod rewrite \
  && chmod u+x /root/db-create-user.sh \
  && chmod u+x /root/db-grant-permission.sh \
  && chmod u+x /root/start.sh \
+ && cp /root/drupal.conf /etc/apache2/sites-available/ \
+ && cp /root/supervisord.conf /etc/supervisor/conf.d/supervisord.conf \
  && a2ensite drupal \
  && a2dissite 000-default
 
-ENV DRUPAL_DB drupal
-ENV DRUPAL_DB_USER drupal
-ENV DRUPAL_DB_PASSWORD drupal
-ENV DRUPAL_PROFILE minimal
-ENV DRUPAL_SUBDIR default
-ENV DRUPAL_MAJOR_VERSION 7
-ENV DRUPAL_DOWNLOAD_METHOD drush
-ENV DRUPAL_GIT_BRANCH 7.x
-ENV DRUPAL_GIT_DEPTH 1
-ENV METHOD auto
-ENV MYSQL_HOST_NAME mysql
+ENV DRUPAL_DB=drupal \
+ DRUPAL_DB_USER=drupal \
+ DRUPAL_DB_PASSWORD=drupal \
+ DRUPAL_PROFILE=minimal \
+ DRUPAL_SUBDIR=default \
+ DRUPAL_MAJOR_VERSION=7 \
+ DRUPAL_DOWNLOAD_METHOD=drush \
+ DRUPAL_GIT_BRANCH=7.x \
+ DRUPAL_GIT_DEPTH=1 \
+ METHOD=auto \
+ MYSQL_HOST_NAME=mysql
 
 EXPOSE 22 80
 
