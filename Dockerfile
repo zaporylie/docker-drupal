@@ -20,7 +20,6 @@ RUN a2enmod rewrite \
  && sed -ri 's/^expose_php\s*=\s*On/expose_php = Off/g' /etc/php5/apache2/php.ini \
  && sed -ri 's/^expose_php\s*=\s*On/expose_php = Off/g' /etc/php5/cli/php.ini \
  && sed -ri 's/^allow_url_fopen\s*=\s*On/allow_url_fopen = Off/g' /etc/php5/apache2/php.ini \
- && sed -ri 's/^allow_url_fopen\s*=\s*On/allow_url_fopen = Off/g' /etc/php5/cli/php.ini \
  && sed -ri 's/^upload_max_filesize\s*=\s*2M/upload_max_filesize = 64M/g' /etc/php5/apache2/php.ini \
  && sed -ri 's/^upload_max_filesize\s*=\s*2M/upload_max_filesize = 64M/g' /etc/php5/cli/php.ini \
  && mkdir -p /var/lock/apache2 /var/run/apache2 /var/run/sshd /var/log/supervisor \
@@ -50,4 +49,6 @@ ENV DRUPAL_DB=drupal \
 
 EXPOSE 22 80
 
-CMD ["/bin/bash", "/root/start.sh"]
+ENTRYPOINT ["/bin/bash"]
+
+CMD ["/root/start.sh"]
