@@ -1,6 +1,10 @@
 FROM ubuntu:trusty
 MAINTAINER Jakub Piasecki <jakub@piaseccy.pl>
 
+COPY ./conf/* /root/
+VOLUME ["/app"]
+WORKDIR /app
+
 RUN DEBIAN_FRONTEND=noninteractive apt-get update \
   && apt-get -yq install \
     openssh-server \
@@ -19,22 +23,14 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
   && rm -rf /var/lib/apt/lists/* \
   && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-COPY ./conf/* /root/
-
-# Prepare volumes
-VOLUME ["/app"]
-WORKDIR /app
-
-# apache2 config
 RUN sed -i "s/variables_order.*/variables_order = \"EGPCS\"/g" /etc/php5/fpm/php.ini \
  && echo "daemon off;" >> /etc/nginx/nginx.conf \
  && sed -i -e "s/keepalive_timeout\s*65/keepalive_timeout 2/" /etc/nginx/nginx.conf \
  && sed -i -e "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g" /etc/php5/fpm/php.ini \
  && sed -i -e "s/;daemonize\s*=\s*yes/daemonize = no/g" /etc/php5/fpm/php-fpm.conf \
  && find /etc/php5/cli/conf.d/ -name "*.ini" -exec sed -i -re 's/^(\s*)#(.*)/\1;\2/g' {} \; \
- && cp /root/drupal.conf /etc/nginx/sites-available/default
-
-RUN cd /home \
+ && cp /root/drupal.conf /etc/nginx/sites-available/default \
+ && cd /home \
  && composer global require drush/drush:dev-master \
  && echo 'export PATH="$HOME/.composer/vendor/bin:$PATH"' >> ~/.bashrc \
  && sed -ri 's/^expose_php\s*=\s*On/expose_php = Off/g' /etc/php5/fpm/php.ini \
