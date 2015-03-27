@@ -1,7 +1,6 @@
 FROM ubuntu:trusty
 MAINTAINER Jakub Piasecki <jakub@piaseccy.pl>
 
-COPY ./conf/* /root/
 VOLUME ["/app"]
 WORKDIR /app
 
@@ -23,13 +22,15 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
   && rm -rf /var/lib/apt/lists/* \
   && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
+COPY ./conf /root/conf/
+
 RUN sed -i "s/variables_order.*/variables_order = \"EGPCS\"/g" /etc/php5/fpm/php.ini \
  && echo "daemon off;" >> /etc/nginx/nginx.conf \
  && sed -i -e "s/keepalive_timeout\s*65/keepalive_timeout 2/" /etc/nginx/nginx.conf \
  && sed -i -e "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g" /etc/php5/fpm/php.ini \
  && sed -i -e "s/;daemonize\s*=\s*yes/daemonize = no/g" /etc/php5/fpm/php-fpm.conf \
  && find /etc/php5/cli/conf.d/ -name "*.ini" -exec sed -i -re 's/^(\s*)#(.*)/\1;\2/g' {} \; \
- && cp /root/drupal.conf /etc/nginx/sites-available/default \
+ && cp /root/conf/drupal.conf /etc/nginx/sites-available/default \
  && cd /home \
  && composer global require drush/drush:dev-master \
  && echo 'export PATH="$HOME/.composer/vendor/bin:$PATH"' >> ~/.bashrc \
@@ -39,29 +40,34 @@ RUN sed -i "s/variables_order.*/variables_order = \"EGPCS\"/g" /etc/php5/fpm/php
  && sed -ri 's/^upload_max_filesize\s*=\s*2M/upload_max_filesize = 64M/g' /etc/php5/fpm/php.ini \
  && sed -ri 's/^upload_max_filesize\s*=\s*2M/upload_max_filesize = 64M/g' /etc/php5/cli/php.ini \
  && mkdir -p /var/run/nginx /var/run/sshd /var/log/supervisor \
- && chmod u+x /root/drupal-download.sh \
- && chmod u+x /root/drupal-install.sh \
- && chmod u+x /root/db-create.sh \
- && chmod u+x /root/db-wait.sh \
- && chmod u+x /root/db-create-user.sh \
- && chmod u+x /root/db-grant-permission.sh \
- && chmod u+x /root/start.sh \
- && cp /root/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+ && chmod u+x /root/conf/drupal-download.sh \
+ && chmod u+x /root/conf/drupal-install.sh \
+ && chmod u+x /root/conf/db-create.sh \
+ && chmod u+x /root/conf/db-wait.sh \
+ && chmod u+x /root/conf/db-create-user.sh \
+ && chmod u+x /root/conf/db-grant-permission.sh \
+ && chmod u+x /root/conf/start.sh \
+ && chmod u+x /root/conf/run.sh \
+ && chmod u+x /root/conf/test.sh \
+ && chmod u+x /root/conf/tests/* \
+ && cp /root/conf/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-ENV DRUPAL_DB=drupal \
- DRUPAL_DB_USER=drupal \
- DRUPAL_DB_PASSWORD=drupal \
- DRUPAL_PROFILE=minimal \
- DRUPAL_SUBDIR=default \
- DRUPAL_MAJOR_VERSION=7 \
- DRUPAL_DOWNLOAD_METHOD=drush \
- DRUPAL_GIT_BRANCH=7.x \
- DRUPAL_GIT_DEPTH=1 \
- METHOD=auto \
- MYSQL_HOST_NAME=mysql
+ENV DRUPAL_DB drupal
+ENV DRUPAL_DB_USER drupal
+ENV DRUPAL_DB_PASSWORD drupal
+ENV DRUPAL_PROFILE minimal
+ENV DRUPAL_SUBDIR default
+ENV DRUPAL_MAJOR_VERSION 7
+ENV DRUPAL_DOWNLOAD_METHOD drush
+ENV DRUPAL_GIT_BRANCH 7.x
+ENV DRUPAL_GIT_DEPTH 1
+ENV METHOD auto
+ENV MYSQL_HOST_NAME mysql
+ENV DRUPAL_TEST 0
+ENV BUILD_TEST 0
 
 EXPOSE 22 80
 
 ENTRYPOINT ["/bin/bash"]
 
-CMD ["/root/start.sh"]
+CMD ["/root/run.sh"]

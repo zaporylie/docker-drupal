@@ -1,8 +1,31 @@
-Drupal Docker Image
+Drupal Docker Image [![Build Status](https://travis-ci.org/zaporylie/docker-drupal.svg?branch=master)](https://travis-ci.org/zaporylie/docker-drupal)
 =============================
-[![nodesource/node](http://dockeri.co/image/zaporylie/drupal)](https://registry.hub.docker.com/u/zaporylie/drupal/)
+
+Simple docker image to build containers for your Drupal projects. If you are working on Drupal code you might be more interested in zaporylie/drupal-dev image which is just an extension for this module anyway.
+
+It was created as a supporting container for zaporylie/drupal-boilerplate project.
+
+Dockerfile is compatibile with Docker 1.2 (due to TravisCI).
+
+## What you get?
+
+* NGINX (thanks to [wiki.nginx.org](http://wiki.nginx.org/Drupal)
+* php-fpm (thanks to [ricardoarmado/docker-drupal-nginx](https://github.com/ricardoamaro/docker-drupal-nginx))
+* all php libraries required by Drupal
+* sshd
+* drush
+**MySQL should be running in separate container!**
+
+## Some features
+
+* autodiscovery mode (by default) which will check if under database credits exists Drupal site OR if settings file exists but there is no DB OR if that's brand new container with nothing in it
+* numbers of environmental variables which can be used to customize container (ex. select Drupal version)
+
 
 ## How to run this container
+
+Please notice, that you have to already have mysql container to start this one. Read more how to run Mysql container below.
+
 ````
 docker run \
   --name <drupal> \
@@ -26,11 +49,14 @@ docker run \
 | DRUPAL_GIT_DEPTH | 1 |
 | METHOD | auto |
 | MYSQL_HOST_NAME | mysql |
+| DRUPAL_TEST (not implemented) | 0 |
+| BUILD_TEST (not implemented) | 0 |
 
 ## Dependencies:
 
-You need to have mysql in separate container(s):
+### Mysql
 
+If you don't want to lose your data build data-only container first:
 ````
 docker run \
   --name mysql_data \
@@ -38,7 +64,7 @@ docker run \
   mysql:5.5 \
   MYSQL data-only container
 ````
-
+... then container with running mysqld process ...
 ````
 docker run \
   --name mysql_service\
@@ -46,3 +72,9 @@ docker run \
   --volumes-from mysql_data \
   -d mysql:5.5
 ````
+
+## Credits
+
+This project was created by Jakub Piasecki <jakub@piaseccy.pl>
+
+[![nodesource/node](http://dockeri.co/image/zaporylie/drupal)](https://registry.hub.docker.com/u/zaporylie/drupal/)
