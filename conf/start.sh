@@ -1,21 +1,31 @@
 #!/bin/sh
-# Bash hasn't been initialized yet so add path to composer manually.
-export PATH="$HOME/.composer/vendor/bin:$PATH"
 
-if [[ -f /root/pre-install.sh ]]; then
-  source /root/pre-install.sh
+if [[ -f /root/conf/pre-install.sh ]]; then
+  echo "Running: pre-install.sh"
+  source /root/conf/pre-install.sh
 fi
 
-if [ "${METHOD}" = "auto" ]; then
+echo "Build method: $METHOD"
 
-  echo "Method: auto"
+if [ "${METHOD}" = "nothing" ]; then
 
-  echo "Wait for MySQL"
-  source /root/db-wait.sh
+  echo "Do nothing"
+
+elif [ "${METHOD}" = "new" ]; then
+  
+  echo "Install new Drupal site"
+  source /root/conf/db-create.sh
+  source /root/conf/db-grant-permission.sh
+  source /root/conf/drupal-install.sh
+  export METHOD_AUTO_RESULT=new_install
+
+elif [ "${METHOD}" = "auto" ]; then
+  echo "Building..."
+  source /root/conf/db-wait.sh
   
   if [ ! -d /app/drupal ] || [ "$(cd /app/drupal/ && drush st | grep 'Drupal version' | wc -l)" = "0"  ]; then
     echo "Missing drupal"
-    source /root/drupal-download.sh
+    source /root/conf/drupal-download.sh
   fi
 
   if [[ ! -f /app/drupal/sites/${DRUPAL_SUBDIR}/settings.php ]]; then
@@ -33,9 +43,9 @@ if [ "${METHOD}" = "auto" ]; then
     else
       
       echo "Install brand new Drupal"
-      source /root/db-create.sh
-      source /root/db-grant-permission.sh
-      source /root/drupal-install.sh
+      source /root/conf/db-create.sh
+      source /root/conf/db-grant-permission.sh
+      source /root/conf/drupal-install.sh
       export METHOD_AUTO_RESULT=new_install
     fi
 
@@ -61,9 +71,9 @@ if [ "${METHOD}" = "auto" ]; then
 
         echo "Install brand new Drupal"
         cp -f /app/drupal/sites/${DRUPAL_SUBDIR}/default.settings.php /app/drupal/sites/${DRUPAL_SUBDIR}/settings.php
-        source /root/db-create.sh
-        source /root/db-grant-permission.sh
-        source /root/drupal-install.sh
+        source /root/conf/db-create.sh
+        source /root/conf/db-grant-permission.sh
+        source /root/conf/drupal-install.sh
         export METHOD_AUTO_RESULT=new_install
 
       fi
@@ -77,8 +87,8 @@ find /app/drupal -type f -exec chmod u=rw,g=r,o= '{}' \;
 find /app/drupal/sites/${DRUPAL_SUBDIR}/files -type d -exec chmod ug=rwx,o= '{}' \;
 find /app/drupal/sites/${DRUPAL_SUBDIR}/files -type f -exec chmod ug=rw,o= '{}' \;
 
-if [[ -f /root/post-install.sh ]]; then
-  source /root/post-install.sh
+if [[ -f /root/conf/post-install.sh ]]; then
+  echo "Running: post-install.sh"
+  source /root/conf/post-install.sh
 fi
 
-/usr/bin/supervisord
