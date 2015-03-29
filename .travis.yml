@@ -6,6 +6,7 @@ env:
     - DOCKER_HOST=tcp://$HOST_IP:2375
     - SLIRP_PORTS="2375 $(seq 49153 49253)"
 
+before_install:
   - sudo sh -c "wget -qO- https://get.docker.io/gpg | apt-key add -"
   - sudo sh -c "echo deb http://get.docker.io/ubuntu docker main > /etc/apt/sources.list.d/docker.list"
   - echo exit 101 | sudo tee /usr/sbin/policy-rc.d
