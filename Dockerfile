@@ -53,19 +53,19 @@ RUN sed -i "s/variables_order.*/variables_order = \"EGPCS\"/g" /etc/php5/fpm/php
  && chmod u+x /root/conf/tests/* \
  && cp /root/conf/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-ENV DRUPAL_DB drupal
-ENV DRUPAL_DB_USER drupal
-ENV DRUPAL_DB_PASSWORD drupal
-ENV DRUPAL_PROFILE minimal
-ENV DRUPAL_SUBDIR default
-ENV DRUPAL_MAJOR_VERSION 7
-ENV DRUPAL_DOWNLOAD_METHOD drush
-ENV DRUPAL_GIT_BRANCH 7.x
-ENV DRUPAL_GIT_DEPTH 1
-ENV METHOD auto
-ENV MYSQL_HOST_NAME mysql
-ENV DRUPAL_TEST 0
-ENV BUILD_TEST 0
+ENV DRUPAL_DB=drupal \
+ DRUPAL_DB_USER=drupal \
+ DRUPAL_DB_PASSWORD=drupal \
+ DRUPAL_PROFILE=minimal \
+ DRUPAL_SUBDIR=default \
+ DRUPAL_MAJOR_VERSION=7 \
+ DRUPAL_DOWNLOAD_METHOD=drush \
+ DRUPAL_GIT_BRANCH=7.x \
+ DRUPAL_GIT_DEPTH=1 \
+ METHOD=auto \
+ MYSQL_HOST_NAME=mysql \
+ DRUPAL_TEST=0 \
+ BUILD_TEST=0
 
 EXPOSE 22 80
 

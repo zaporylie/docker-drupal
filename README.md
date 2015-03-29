@@ -10,11 +10,13 @@ Dockerfile is compatibile with Docker 1.2 (due to TravisCI).
 ## What you get?
 
 * NGINX (thanks to [wiki.nginx.org](http://wiki.nginx.org/Drupal)
+* php 5.6
 * php-fpm (thanks to [ricardoarmado/docker-drupal-nginx](https://github.com/ricardoamaro/docker-drupal-nginx))
 * all php libraries required by Drupal
 * sshd
 * drush
-**MySQL should be running in separate container!**
+
+**MySQL service should be running in separate container!**
 
 ## Some features
 
@@ -34,6 +36,7 @@ docker run \
   -P \
   zaporylie/drupal
 ````
+
 ## Configuration
 
 | ENNVIRONMENTAL VARIABLE  |  DEFAULT VALUE |
@@ -57,6 +60,7 @@ docker run \
 ### Mysql
 
 If you don't want to lose your data build data-only container first:
+
 ````
 docker run \
   --name mysql_data \
@@ -64,7 +68,9 @@ docker run \
   mysql:5.5 \
   MYSQL data-only container
 ````
+
 ... then container with running mysqld process ...
+
 ````
 docker run \
   --name mysql_service\
