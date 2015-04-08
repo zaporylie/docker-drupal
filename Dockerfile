@@ -47,7 +47,6 @@ RUN sed -i "s/variables_order.*/variables_order = \"EGPCS\"/g" /etc/php5/fpm/php
  && chmod u+x /root/conf/db-grant-permission.sh \
  && chmod u+x /root/conf/start.sh \
  && chmod u+x /root/conf/run.sh \
- && mv /root/conf/run.sh /root/run.sh \
  && chmod u+x /root/conf/tests/* \
  && cp /root/conf/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
@@ -69,4 +68,4 @@ EXPOSE 22 80
 
 ENTRYPOINT ["/bin/bash"]
 
-CMD ["/root/run.sh"]
+CMD ["/root/conf/run.sh"]
