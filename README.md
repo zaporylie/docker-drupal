@@ -1,4 +1,4 @@
-Drupal Docker Image [![Build Status](https://travis-ci.org/zaporylie/docker-drupal.svg?branch=master)](https://travis-ci.org/zaporylie/docker-drupal)
+Drupal Docker Image
 =============================
 
 Simple docker image to build containers for your Drupal projects. If you are working on Drupal code you might be more interested in zaporylie/drupal-dev image which is just an extension for this module anyway.
@@ -37,6 +37,18 @@ docker run \
   zaporylie/drupal
 ````
 
+## How to test it?
+
+````
+docker run \
+  --name <drupal> \
+  --link <mysql_container_name_or_id>:mysql \
+  -ti \
+  -P \
+  -e BUILD_TEST=1 \
+  zaporylie/drupal
+````
+
 ## Configuration
 
 | ENNVIRONMENTAL VARIABLE  |  DEFAULT VALUE |
@@ -53,7 +65,7 @@ docker run \
 | METHOD | auto |
 | MYSQL_HOST_NAME | mysql |
 | DRUPAL_TEST (not implemented) | 0 |
-| BUILD_TEST (not implemented) | 0 |
+| BUILD_TEST | 0 |
 
 ## Dependencies:
 
