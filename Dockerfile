@@ -19,7 +19,6 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
     php5-gd \
     php-pear \
     php-apc \
-  && rm -rf /var/lib/apt/lists/* \
   && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 COPY ./conf /root/conf/
@@ -49,7 +48,6 @@ RUN sed -i "s/variables_order.*/variables_order = \"EGPCS\"/g" /etc/php5/fpm/php
  && chmod u+x /root/conf/start.sh \
  && chmod u+x /root/conf/run.sh \
  && mv /root/conf/run.sh /root/run.sh \
- && chmod u+x /root/conf/test.sh \
  && chmod u+x /root/conf/tests/* \
  && cp /root/conf/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
