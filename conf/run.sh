@@ -13,7 +13,7 @@ if [[ -f /root/conf/after-start.sh ]]; then
 fi
 
 # Run tests or supervisor
-if [[ "$(BUILD_TEST)" = 1 ]]; then
+if [[ "${BUILD_TEST}" = 1 ]]; then
 
   # Start nginx and php-fpm
   /usr/bin/supervisord &
