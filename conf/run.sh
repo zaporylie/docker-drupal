@@ -15,6 +15,14 @@ fi
 # Run tests or supervisor
 if [[ "${BUILD_TEST}" = 1 ]]; then
 
+  REQUIREMENTS="/usr/bin/shunit2 /bin/nc"
+  for R in $REQUIREMENTS; do
+    if [ ! -x "$R" ]; then
+      echo "Checking requirement $R... Not found. Aborting"
+      exit 1
+    fi
+  done
+
   # Start nginx and php-fpm
   /usr/bin/supervisord &
   sleep 8s
@@ -24,7 +32,7 @@ if [[ "${BUILD_TEST}" = 1 ]]; then
   for f in $FILES
   do 
     echo "Running: $f"
-    source $f
+    $f
   done
 
 else 

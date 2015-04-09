@@ -19,6 +19,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
     php5-gd \
     php-pear \
     php-apc \
+    shunit2 \
   && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 COPY ./conf /root/conf/

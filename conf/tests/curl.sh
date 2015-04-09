@@ -1,13 +1,29 @@
 #!/bin/bash
 
-if [ ! "$(curl -I http://localhost:80)" ]; then
-  echo "Server doesn't work"
-  exit 1
-fi
+handleSigTerm()
+{
+    echo SIGTERM
+}
 
-if [ "$(curl -I http://localhost:80 | grep 'Drupal' | wc -l)" = "0" ]; then 
-  echo "Server is running but X-Generator is not a Drupal"
-  exit 1
-fi
+oneTimeSetUp()
+{
+    trap "handleSigTerm" TERM
+}
 
-echo "curl test passed"
+testNginxAccessibleOnPort80() 
+{
+  
+  curl -I http://localhost:80
+  
+  assertEquals "NGINX should be accessible on port 80" 0 $?
+}
+
+testXGenerator() 
+{
+
+  rows=$(curl -I http://localhost:80 | grep 'Drupal' | wc -l)
+
+  assertEquals "X-Generator is not a Drupal" 1 $rows
+}
+
+. shunit2
