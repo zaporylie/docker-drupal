@@ -64,7 +64,7 @@ docker run \
 | DRUPAL_GIT_DEPTH | 1 |
 | METHOD | auto |
 | MYSQL_HOST_NAME | mysql |
-| DRUPAL_TEST (not implemented) | 0 |
+| DRUPAL_TEST | 0 |
 | BUILD_TEST | 0 |
 
 ## Dependencies:
