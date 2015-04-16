@@ -49,7 +49,9 @@ RUN sed -i "s/variables_order.*/variables_order = \"EGPCS\"/g" /etc/php5/fpm/php
  && chmod u+x /root/conf/start.sh \
  && chmod u+x /root/conf/run.sh \
  && chmod u+x /root/conf/tests/* \
- && cp /root/conf/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+ && cp /root/conf/supervisord.conf /etc/supervisor/conf.d/supervisord.conf \
+ && mkdir -p /root/conf/before-start \
+ && mkdir -p /root/conf/after-start
 
 ENV DRUPAL_DB=drupal \
  DRUPAL_DB_USER=drupal \
