@@ -11,7 +11,7 @@ Dockerfile is compatibile with Docker 1.2 (due to TravisCI).
 
 * NGINX (thanks to [wiki.nginx.org](http://wiki.nginx.org/Drupal)
 * php 5.6
-* php-fpm (thanks to [ricardoarmado/docker-drupal-nginx](https://github.com/ricardoamaro/docker-drupal-nginx))
+* php-fpm (thanks to [ricardoamaro/docker-drupal-nginx](https://github.com/ricardoamaro/docker-drupal-nginx))
 * all php libraries required by Drupal
 * sshd
 * drush
