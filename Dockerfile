@@ -20,6 +20,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
     php-pear \
     php-apc \
     shunit2 \
+    pwgen \
   && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 COPY ./conf /root/conf/
@@ -51,7 +52,13 @@ RUN sed -i "s/variables_order.*/variables_order = \"EGPCS\"/g" /etc/php5/fpm/php
  && chmod u+x /root/conf/tests/* \
  && cp /root/conf/supervisord.conf /etc/supervisor/conf.d/supervisord.conf \
  && mkdir -p /root/conf/before-start \
- && mkdir -p /root/conf/after-start
+ && mkdir -p /root/conf/after-start \
+ && cp /root/conf/sshd.sh /root/conf/after-start \
+ && mkdir -p /var/run/sshd \
+ && echo 'root:defaultpassword' | chpasswd \
+ && sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config \
+ && sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd \
+ && echo "export VISIBLE=now" >> /etc/profile
 
 ENV DRUPAL_DB=drupal \
  DRUPAL_DB_USER=drupal \
@@ -65,7 +72,8 @@ ENV DRUPAL_DB=drupal \
  METHOD=auto \
  MYSQL_HOST_NAME=mysql \
  DRUPAL_TEST=0 \
- BUILD_TEST=0
+ BUILD_TEST=0 \
+ NOTVISIBLE="in users profile"
 
 EXPOSE 22 80
 
