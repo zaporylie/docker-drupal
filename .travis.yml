@@ -5,4 +5,4 @@ install:
 
 script:
   - ./run "docker version"
-  - ./run "docker run --name mysql_service -e MYSQL_ROOT_PASSWORD=test -d mysql:5.5 && docker build -t drupal . && docker run --name drupal --link mysql_service:mysql -e BUILD_TEST=1 -i drupal"
+  - ./run "docker build -t drupal . && docker run --name drupal -e BUILD_TEST=1 -i drupal"
