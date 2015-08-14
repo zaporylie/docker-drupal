@@ -1,6 +1,8 @@
 Drupal Docker Image
 =============================
 
+[![Build Status](https://travis-ci.org/zaporylie/docker-drupal.svg?branch=master)](https://travis-ci.org/zaporylie/docker-drupal)[![Pulls](https://img.shields.io/docker/pulls/zaporylie/drupal.svg)](https://hub.docker.com/r/zaporylie/drupal)[![Stars](https://img.shields.io/docker/stars/zaporylie/drupal.svg)](https://hub.docker.com/r/zaporylie/drupal)
+
 Simple docker image to build containers for your Drupal projects. If you are working on Drupal code you might be more interested in zaporylie/drupal-dev image which is just an extension for this image anyway.
 
 ## What you get?
