@@ -4,7 +4,6 @@ install:
   - curl -sLo - http://j.mp/install-travis-docker | sh -xe
 
 script:
-  - ./run docker version
-  - ./run docker build -t zaporylie/drupal .
-  - ./run docker run --name mysql_service -e MYSQL_ROOT_PASSWORD=test -d mysql:5.5
-  - ./run docker run --name drupal --link mysql_service:mysql -e BUILD_TEST=1 -ti -p 80:80 zaporylie/drupal
+  - ./run "docker version"
+  - ./run "docker run --name mysql_service -e MYSQL_ROOT_PASSWORD=test -d mysql:5.5"
+  - ./run "docker build -t drupal . && docker run --name drupal --link mysql_service:mysql -e BUILD_TEST=1 -i drupal"
