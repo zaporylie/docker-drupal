@@ -31,6 +31,7 @@ Simple docker image to build containers for your Drupal projects. If you are wor
 docker run \
   --name <drupal> \
   --link <mysql_container_name_or_id>:mysql \
+  -e MYSQL_HOST_NAME=mysql \
   -d \
   -P \
   zaporylie/drupal
@@ -43,18 +44,6 @@ docker run \
   --name <drupal> \
   -d \
   -P \
-  zaporylie/drupal
-````
-
-### How to run container in test mode?
-
-````
-docker run \
-  --name <drupal> \
-  --link <mysql_container_name_or_id>:mysql \
-  -ti \
-  -P \
-  -e BUILD_TEST=1 \
   zaporylie/drupal
 ````
 
@@ -72,7 +61,7 @@ docker run \
 | DRUPAL_GIT_BRANCH | 7.x | Only if DRUPAL_DOWNLOAD_METHOD is git |
 | DRUPAL_GIT_DEPTH | 1 | Only if DRUPAL_DOWNLOAD_METHOD is git |
 | METHOD | auto | Synchronization method (use drush sql-sync or file) |
-| MYSQL_HOST_NAME | mysql | It is not fully supported yet |
+| MYSQL_HOST_NAME | (optional) | skip this if you're not linking mysql container |
 | DRUPAL_TEST | 0 |  |
 | BUILD_TEST | 0 |  |
 
