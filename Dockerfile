@@ -61,7 +61,7 @@ RUN sed -i "s/variables_order.*/variables_order = \"EGPCS\"/g" /etc/php5/fpm/php
  && sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config \
  && sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd \
  && echo "export VISIBLE=now" >> /etc/profile \
- && cp /root/conf/mysqld.sh /root/conf/before-start
+ && cp /root/conf/mysqld.sh /root/conf/before-start/00-mysqld.sh
 
 ENV DRUPAL_DB=drupal \
  DRUPAL_DB_USER=drupal \
@@ -73,7 +73,6 @@ ENV DRUPAL_DB=drupal \
  DRUPAL_GIT_BRANCH=7.x \
  DRUPAL_GIT_DEPTH=1 \
  METHOD=auto \
- MYSQL_HOST_NAME=mysql \
  DRUPAL_TEST=0 \
  BUILD_TEST=0 \
  NOTVISIBLE="in users profile"
