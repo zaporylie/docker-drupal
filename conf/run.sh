@@ -37,7 +37,7 @@ if [[ "${BUILD_TEST}" = 1 ]]; then
   done
 
   # Start nginx and php-fpm.
-  /usr/bin/supervisord &
+  /usr/bin/supervisord -c /etc/supervisor/supervisord.conf &
   # And wait few seconds to be sure if it's running.
   sleep 8s
 
@@ -51,5 +51,5 @@ if [[ "${BUILD_TEST}" = 1 ]]; then
 
 else 
   # Otherwise just use supervisord.
-  /usr/bin/supervisord
+  /usr/bin/supervisord -c /etc/supervisor/supervisord.conf
 fi
