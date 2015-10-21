@@ -1,8 +1,16 @@
-sudo: true
+sudo: required
 
-install:
-  - curl -sLo - http://j.mp/install-travis-docker | sh -xe
+services:
+  - docker
 
 script:
-  - ./run "docker version"
-  - ./run "docker build -t drupal . && docker run --name drupal -e BUILD_TEST=1 -i drupal"
+  # Show version of Docker used to build image and run container.
+  - docker version
+  # Build image (use the same namespace as on docker hub)
+  - docker build -t zaporylie/drupal .
+  # Show all docker images.
+  - docker images
+  # Show all container.
+  - docker ps -a
+  # Run container in test mode.
+  - docker run --name drupal -i -e BUILD_TEST=1 zaporylie/drupal
