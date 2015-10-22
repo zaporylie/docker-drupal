@@ -1,5 +1,8 @@
 sudo: required
 
+service:
+  - docker
+
 env:
   global:
     - DOCKER_IMAGE_NAME=zaporylie/drupal
