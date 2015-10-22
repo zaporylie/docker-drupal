@@ -43,39 +43,36 @@ RUN sed -i "s/variables_order.*/variables_order = \"EGPCS\"/g" /etc/php5/fpm/php
  && sed -ri 's/^upload_max_filesize\s*=\s*2M/upload_max_filesize = 64M/g' /etc/php5/fpm/php.ini \
  && sed -ri 's/^upload_max_filesize\s*=\s*2M/upload_max_filesize = 64M/g' /etc/php5/cli/php.ini \
  && mkdir -p /var/run/nginx /var/run/sshd /var/log/supervisor \
- && chmod u+x /root/conf/drupal-download.sh \
- && chmod u+x /root/conf/drupal-install.sh \
- && chmod u+x /root/conf/db-create.sh \
- && chmod u+x /root/conf/db-wait.sh \
- && chmod u+x /root/conf/db-create-user.sh \
- && chmod u+x /root/conf/db-grant-permission.sh \
- && chmod u+x /root/conf/start.sh \
- && chmod u+x /root/conf/run.sh \
- && chmod u+x /root/conf/tests/* \
  && cp /root/conf/supervisord.conf /etc/supervisor/conf.d/supervisord.conf \
  && mkdir -p /root/conf/before-start \
  && mkdir -p /root/conf/after-start \
- && cp /root/conf/sshd.sh /root/conf/after-start \
  && mkdir -p /var/run/sshd \
  && echo 'root:defaultpassword' | chpasswd \
  && sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config \
  && sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd \
- && echo "export VISIBLE=now" >> /etc/profile \
- && cp /root/conf/mysqld.sh /root/conf/before-start/00-mysqld.sh
+ && echo "export VISIBLE=now" >> /etc/profile
 
-ENV DRUPAL_DB=drupal \
- DRUPAL_DB_USER=drupal \
- DRUPAL_DB_PASSWORD=drupal \
- DRUPAL_PROFILE=minimal \
- DRUPAL_SUBDIR=default \
- DRUPAL_MAJOR_VERSION=7 \
- DRUPAL_DOWNLOAD_METHOD=drush \
- DRUPAL_GIT_BRANCH=7.x \
- DRUPAL_GIT_DEPTH=1 \
- METHOD=auto \
- DRUPAL_TEST=0 \
- BUILD_TEST=0 \
- NOTVISIBLE="in users profile"
+ENV DRUPAL_PROFILE=minimal \
+ DRUPAL_SUBDIR=default
+
+ENV DB_SYNC_METHOD=auto
+ENV DB_HOSTNAME= \
+ DB_USER=drupal \
+ DB_PASSWORD=drupal \
+ DB_PORT=drupal \
+ DB_NAME=drupal
+
+ENV CODE_SYNC_METHOD=auto
+ENV CODE_DRUSH_MAJOR_VERSION=7
+ENV CODE_GIT_CLONE_URL=http://git.drupal.org/project/drupal.git \
+ CODE_GIT_CLONE_BRANCH=7.x \
+ CODE_GIT_CLONE_DEPTH=1 \
+ CODE_GIT_CLONE_SHA=HEAD
+
+ENV TEST_BUILD= \
+ TEST_DRUPAL=
+
+ENV NOTVISIBLE="in users profile"
 
 EXPOSE 22 80
 

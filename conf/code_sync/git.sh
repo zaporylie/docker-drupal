@@ -20,4 +20,8 @@ if [ -z "${CODE_GIT_CLONE_URL}" ]; then
 
   # Checkout to given SHA.
   git checkout ${CODE_GIT_CLONE_SHA}
+
+else
+  echo "==> [error] Missing Clone URL";
+  exit 1;
 fi
