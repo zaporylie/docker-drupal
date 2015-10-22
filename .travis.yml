@@ -10,7 +10,7 @@ env:
     - MYSQL_CONTAINER_NAME=mysql
     - MYSQL_VERSION=5.5
   matrix:
-    - MYSQL_HOST_NAME=localhost
+    - MYSQL_HOST_NAME=
     - MYSQL_HOST_NAME=mysql
     - MYSQL_HOST_NAME=mysql MYSQL_VERSION=5.6
 
