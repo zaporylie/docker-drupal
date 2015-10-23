@@ -8,6 +8,7 @@ env:
     - APP_IMAGE_NAME=zaporylie/drupal
     - APP_CONTAINER_NAME=drupal
     - DB_CONTAINER_NAME=mysql
+    - DB_HOSTNAME=db
     - DB_VERSION=5.5
     - CODE_SYNC_METHOD=auto
     - CODE_DRUSH_MAJOR_VERSION=8
@@ -33,4 +34,4 @@ script:
   # Show all container.
   - docker ps -a
   # Run container in test mode.
-  - docker run -i --name ${APP_CONTAINER_NAME} --link ${DB_CONTAINER_NAME}:db -e CODE_SYNC_METHOD=${CODE_SYNC_METHOD} -e CODE_DRUSH_MAJOR_VERSION=${CODE_DRUSH_MAJOR_VERSION} -e BUILD_TEST=1 ${APP_IMAGE_NAME}
+  - docker run -i --name ${APP_CONTAINER_NAME} --link ${DB_CONTAINER_NAME}:db -e DB_HOSTNAME=${DB_HOSTNAME} -e CODE_SYNC_METHOD=${CODE_SYNC_METHOD} -e CODE_DRUSH_MAJOR_VERSION=${CODE_DRUSH_MAJOR_VERSION} -e BUILD_TEST=1 ${APP_IMAGE_NAME}
