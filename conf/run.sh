@@ -53,7 +53,6 @@ if [[ -z "${TEST_BUILD}" ]]; then
     echo "=> Attaching: $f"
     $f
   done
-
 else
   # Otherwise just use supervisord.
   /usr/bin/supervisord -c /etc/supervisor/supervisord.conf

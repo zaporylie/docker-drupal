@@ -25,6 +25,10 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
     pwgen \
   && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
+RUN cd /home \
+ && composer global require drush/drush:dev-master \
+ && echo 'export PATH="$HOME/.composer/vendor/bin:$PATH"' >> ~/.bashrc
+
 COPY ./conf /root/conf/
 
 RUN sed -i "s/variables_order.*/variables_order = \"EGPCS\"/g" /etc/php5/fpm/php.ini \
@@ -34,9 +38,6 @@ RUN sed -i "s/variables_order.*/variables_order = \"EGPCS\"/g" /etc/php5/fpm/php
  && sed -i -e "s/;daemonize\s*=\s*yes/daemonize = no/g" /etc/php5/fpm/php-fpm.conf \
  && find /etc/php5/cli/conf.d/ -name "*.ini" -exec sed -i -re 's/^(\s*)#(.*)/\1;\2/g' {} \; \
  && cp /root/conf/drupal.conf /etc/nginx/sites-available/default \
- && cd /home \
- && composer global require drush/drush:dev-master \
- && echo 'export PATH="$HOME/.composer/vendor/bin:$PATH"' >> ~/.bashrc \
  && sed -ri 's/^expose_php\s*=\s*On/expose_php = Off/g' /etc/php5/fpm/php.ini \
  && sed -ri 's/^expose_php\s*=\s*On/expose_php = Off/g' /etc/php5/cli/php.ini \
  && sed -ri 's/^allow_url_fopen\s*=\s*On/allow_url_fopen = Off/g' /etc/php5/fpm/php.ini \
@@ -44,13 +45,12 @@ RUN sed -i "s/variables_order.*/variables_order = \"EGPCS\"/g" /etc/php5/fpm/php
  && sed -ri 's/^upload_max_filesize\s*=\s*2M/upload_max_filesize = 64M/g' /etc/php5/cli/php.ini \
  && mkdir -p /var/run/nginx /var/run/sshd /var/log/supervisor \
  && cp /root/conf/supervisord.conf /etc/supervisor/conf.d/supervisord.conf \
- && mkdir -p /root/conf/before-start \
- && mkdir -p /root/conf/after-start \
  && mkdir -p /var/run/sshd \
  && echo 'root:defaultpassword' | chpasswd \
  && sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config \
  && sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd \
- && echo "export VISIBLE=now" >> /etc/profile
+ && echo "export VISIBLE=now" >> /etc/profile \
+ && chmod -R u+x /root/conf/tests
 
 ENV DRUPAL_PROFILE=minimal \
  DRUPAL_SUBDIR=default
@@ -59,10 +59,10 @@ ENV DB_SYNC_METHOD=auto
 ENV DB_HOSTNAME= \
  DB_USER=drupal \
  DB_PASSWORD=drupal \
- DB_PORT=drupal \
  DB_NAME=drupal
 
-ENV CODE_SYNC_METHOD=auto
+ENV CODE_SYNC_METHOD=auto \
+ CODE_SYNC_FOLDER=/app/drupal
 ENV CODE_DRUSH_MAJOR_VERSION=7
 ENV CODE_GIT_CLONE_URL=http://git.drupal.org/project/drupal.git \
  CODE_GIT_CLONE_BRANCH=7.x \

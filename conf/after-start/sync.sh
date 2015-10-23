@@ -20,7 +20,7 @@ if [ "${DB_SYNC_METHOD}" = "auto" ]; then
   fi
 fi
 if [ -z "${DB_SYNC_METHOD}"]; then
-  source /root/conf/code_sync/${DB_SYNC}.sh
-else
   echo "==> Skip db sync."
+else
+  source /root/conf/code_sync/${DB_SYNC}.sh
 fi

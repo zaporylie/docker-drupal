@@ -21,14 +21,17 @@ fi
 # Check which method could be used.
 if [ "${CODE_SYNC_METHOD}" = "auto" ]; then
   if [ ! -d "/app/drupal" ] || [ "$(cd /app/drupal/ && drush st | grep 'Drupal version' | wc -l)" = "0" ]; then
-    CODE_SYNC_METHOD=""
-  else
     CODE_SYNC_METHOD="drush"
+  else
+    CODE_SYNC_METHOD=""
   fi
 fi
 if [ -z "${CODE_SYNC_METHOD}" ]; then
+  # Return information that code sync has been skipped.
+  echo "==> Skip file sync."
+else
   # Sync code.
-  if [ -f "/root/conf/code_sync/${CODE_SYNC_METHOD}.sh"]; then
+  if [ -f "/root/conf/code_sync/${CODE_SYNC_METHOD}.sh" ]; then
     echo "==> Attaching: /root/conf/code_sync/${CODE_SYNC_METHOD}.sh"
     source /root/conf/code_sync/${CODE_SYNC_METHOD}.sh
   else
@@ -36,14 +39,7 @@ if [ -z "${CODE_SYNC_METHOD}" ]; then
     echo "==> [${CODE_SYNC_METHOD}] This code sync method has not been implemented yet"
     exit 1
   fi
-else
-  # Return information that code sync has been skipped.
-  echo "==> Skip file sync."
 fi
-
-cd /app/drupal \
-  && drush si ${DRUPAL_PROFILE} --db-url=mysql://${DRUPAL_DB_USER}:${DRUPAL_DB_PASSWORD}@${MYSQL_HOST_NAME}/${DRUPAL_DB} --sites-subdir=${DRUPAL_SUBDIR} -y \
-  && echo "=> Installed new site from predefined profile."
 
 
 

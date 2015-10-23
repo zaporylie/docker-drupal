@@ -1,15 +1,5 @@
 #!/bin/bash
 
-handleSigTerm()
-{
-  echo SIGTERM
-}
-
-oneTimeSetUp()
-{
-  trap "handleSigTerm" TERM
-}
-
 testDrupal()
 {
   if [ "${DRUPAL_TEST}" = 1 ]; then

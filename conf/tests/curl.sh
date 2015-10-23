@@ -1,24 +1,14 @@
 #!/bin/bash
 
-handleSigTerm()
+testNginxAccessibleOnPort80()
 {
-    echo SIGTERM
-}
 
-oneTimeSetUp()
-{
-    trap "handleSigTerm" TERM
-}
-
-testNginxAccessibleOnPort80() 
-{
-  
   curl -I http://localhost:80
-  
+
   assertEquals "NGINX should be accessible on port 80" 0 $?
 }
 
-testXGenerator() 
+testXGenerator()
 {
 
   rows=$(curl -I http://localhost:80 | grep 'Drupal' | wc -l)
