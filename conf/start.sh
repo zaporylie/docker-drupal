@@ -21,12 +21,12 @@ fi
 # Check which method could be used.
 if [ "${CODE_SYNC_METHOD}" = "auto" ]; then
   if [ ! -d "/app/drupal" ] || [ "$(cd /app/drupal/ && drush st | grep 'Drupal version' | wc -l)" = "0" ]; then
-    CODE_SYNC_METHOD = ""
+    CODE_SYNC_METHOD=""
   else
-    CODE_SYNC_METHOD = "drush"
+    CODE_SYNC_METHOD="drush"
   fi
 fi
-if [ -z "${CODE_SYNC_METHOD}"]; then
+if [ -z "${CODE_SYNC_METHOD}" ]; then
   # Sync code.
   if [ -f "/root/conf/code_sync/${CODE_SYNC_METHOD}.sh"]; then
     echo "==> Attaching: /root/conf/code_sync/${CODE_SYNC_METHOD}.sh"

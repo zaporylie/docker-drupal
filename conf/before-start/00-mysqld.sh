@@ -44,4 +44,6 @@ if [ -z "${DB_HOSTNAME}" ]; then
 
   echo "=> Changing password"
   mysqladmin -u root password ${DB_ENV_MYSQL_ROOT_PASSWORD}
+else
+  WaitForMySQL
 fi

@@ -10,13 +10,13 @@
 if [ "${DB_SYNC_METHOD}" = "auto" ]; then
   if [ -f "/app/output/dump.sql" ]; then
     # Use file.
-    DB_SYNC_METHOD = "file"
+    DB_SYNC_METHOD="file"
   elif [[ "$(drush @${DB_SYNC_DRUSH_FROM} st | grep 'Connected' | wc -l)" == "1" ]]; then
     # Use drush.
-    DB_SYNC_METHOD = "drush"
+    DB_SYNC_METHOD="drush"
   else
     # Do nothing.
-    DB_SYNC_METHOD = ""
+    DB_SYNC_METHOD=""
   fi
 fi
 if [ -z "${DB_SYNC_METHOD}"]; then
