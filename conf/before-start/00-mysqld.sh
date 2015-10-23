@@ -15,10 +15,10 @@ WaitForMySQL ()
     sleep 1
     if [ -z "${DB_HOSTNAME}" ]; then
       echo "Internal";
-      mysql -uroot -e "status" > /dev/null 2>&1 && break
+      mysql -uroot -e ";" > /dev/null 2>&1 && break
     else
       echo "External";
-      mysql -h${DB_HOSTNAME} -p${DB_ENV_MYSQL_ROOT_PASSWORD}  -e "status" > /dev/null 2>&1 && break
+      mysql -h${DB_HOSTNAME} -p${DB_ENV_MYSQL_ROOT_PASSWORD}  -e ";" > /dev/null 2>&1 && break
     fi
   done
 }
@@ -29,7 +29,7 @@ StartMySQL ()
 }
 
 # Check first if user linked mysql container, if not - run mysql here.
-if [ -z "${DB_HOSTNAME}" ] || [ "${DB_HOSTNAME}" == "localhost" ]; then
+if [ "$( cat /etc/hosts | grep ${DB_HOSTNAME} | wc -l)" == "0" ] || [ "${DB_HOSTNAME}" == "localhost" ]; then
 
   echo "=> No mysql container has been linked"
   echo "=> Starting MySQL ..."

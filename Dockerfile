@@ -56,7 +56,7 @@ ENV DRUPAL_PROFILE=minimal \
  DRUPAL_SUBDIR=default
 
 ENV DB_SYNC_METHOD=auto
-ENV DB_HOSTNAME= \
+ENV DB_HOSTNAME=db \
  DB_USER=drupal \
  DB_PASSWORD=drupal \
  DB_NAME=drupal

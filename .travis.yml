@@ -11,8 +11,8 @@ env:
     - DB_VERSION=5.5
   matrix:
     - DB_HOSTNAME=
-    - DB_HOSTNAME=mysql
-    - DB_HOSTNAME=mysql DB_VERSION=5.6
+    - DB_HOSTNAME=db
+    - DB_HOSTNAME=db DB_VERSION=5.6
 
 script:
   # Show version of Docker used to build image and run container.
