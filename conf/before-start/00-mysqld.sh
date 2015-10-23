@@ -13,10 +13,10 @@ WaitForMySQL ()
     fi
     echo "=> Waiting for confirmation of MySQL service startup, trying ${i}/${LOOP_LIMIT} ..."
     sleep 1
-    if [ -z "${DB_HOSTNAME}"]; then
+    if [ -z "${DB_HOSTNAME}" ]; then
       mysql -h${DB_HOSTNAME} -p${DB_ENV_MYSQL_ROOT_PASSWORD}  -e ";" > /dev/null 2>&1 && break
     else
-      mysql -uroot  -e ";" > /dev/null 2>&1 && break
+      mysql -uroot -e ";" > /dev/null 2>&1 && break
     fi
   done
 }
