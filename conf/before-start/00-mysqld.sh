@@ -8,7 +8,7 @@ WaitForMySQL ()
   for (( i=0 ; ; i++ )); do
     if [ ${i} -eq ${LOOP_LIMIT} ]; then
       echo "Time out."
-      tail -n 100 ${DB_LOG}
+      # tail -n 100 ${DB_LOG}
       exit 1
     fi
     echo "=> Waiting for confirmation of MySQL service startup, trying ${i}/${LOOP_LIMIT} ..."
@@ -16,7 +16,7 @@ WaitForMySQL ()
     if [ -z "${DB_HOSTNAME}"]; then
       mysql -h${DB_HOSTNAME} -p${DB_ENV_MYSQL_ROOT_PASSWORD}  -e ";" > /dev/null 2>&1 && break
     else
-      mysql -p${DB_ENV_MYSQL_ROOT_PASSWORD}  -e ";" > /dev/null 2>&1 && break
+      mysql -uroot  -e ";" > /dev/null 2>&1 && break
     fi
   done
 }

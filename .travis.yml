@@ -5,26 +5,25 @@ services:
 
 env:
   global:
-    - DOCKER_IMAGE_NAME=zaporylie/drupal
-    - DOCKER_CONTAINER_NAME=drupal
-    - MYSQL_CONTAINER_NAME=mysql
-    - MYSQL_VERSION=5.5
+    - APP_IMAGE_NAME=zaporylie/drupal
+    - APP_CONTAINER_NAME=drupal
+    - DB_CONTAINER_NAME=mysql
+    - DB_VERSION=5.5
   matrix:
-    - MYSQL_HOST_NAME=
-    - MYSQL_HOST_NAME=mysql
-    - MYSQL_HOST_NAME=mysql MYSQL_VERSION=5.6
+    - DB_HOSTNAME=
+    - DB_HOSTNAME=mysql
+    - DB_HOSTNAME=mysql DB_VERSION=5.6
 
 script:
   # Show version of Docker used to build image and run container.
   - docker version
   # Build image (use the same namespace as on docker hub)
-  - docker build -t ${DOCKER_IMAGE_NAME} .
+  - docker build -t ${APP_IMAGE_NAME} .
   # Run mysql container.
-  - docker run -d --name ${MYSQL_CONTAINER_NAME} -e MYSQL_ROOT_PASSWORD=test mysql:${MYSQL_VERSION}
+  - docker run -d --name ${DB_CONTAINER_NAME} -e MYSQL_ROOT_PASSWORD=test mysql:${DB_VERSION}
   # Show all docker images.
   - docker images
   # Show all container.
   - docker ps -a
   # Run container in test mode.
-  - docker run -i --name ${DOCKER_CONTAINER_NAME} --link ${MYSQL_CONTAINER_NAME}:${MYSQL_CONTAINER_NAME} -e MYSQL_HOST_NAME=${MYSQL_HOST_NAME} -e BUILD_TEST=1 ${DOCKER_IMAGE_NAME}
-
+  - docker run -i --name ${APP_CONTAINER_NAME} --link ${DB_CONTAINER_NAME}:${DB_HOSTNAME} -e DB_HOSTNAME=${DB_HOSTNAME} -e BUILD_TEST=1 ${APP_IMAGE_NAME}
