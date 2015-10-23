@@ -12,6 +12,10 @@ env:
     - DB_VERSION=5.5
     - CODE_SYNC_METHOD=auto
     - CODE_DRUSH_MAJOR_VERSION=8
+    - DRUPAL_PROFILE=minimal
+    - DRUPAL_SUBDIR=default
+    - DB_SYNC_METHOD=auto
+    - CODE_GIT_CLONE_BRANCH=8.0.x
   matrix:
     # Try local database.
     - DB_HOSTNAME=
@@ -19,8 +23,14 @@ env:
     - DB_VERSION=5.6
     # Try clone git repo.
     - CODE_SYNC_METHOD=git
-    # Try Drupal 7.
-    - CODE_DRUSH_MAJOR_VERSION=7
+    # Try clone drupal git repo with given branch.
+    - CODE_SYNC_METHOD=git CODE_GIT_CLONE_BRANCH=7.x
+    # Try Drupal 7 with Drush.
+    - CODE_SYNC_METHOD=drush CODE_DRUSH_MAJOR_VERSION=7
+    # Different instalation profile.
+    - DRUPAL_PROFILE=standard
+    # Different subdir
+    - DRUPAL_SUBDIR=localhost
 
 script:
   # Show version of Docker used to build image and run container.
@@ -34,4 +44,4 @@ script:
   # Show all container.
   - docker ps -a
   # Run container in test mode.
-  - docker run -i --name ${APP_CONTAINER_NAME} --link ${DB_CONTAINER_NAME}:db -e DB_HOSTNAME=${DB_HOSTNAME} -e CODE_SYNC_METHOD=${CODE_SYNC_METHOD} -e CODE_DRUSH_MAJOR_VERSION=${CODE_DRUSH_MAJOR_VERSION} -e BUILD_TEST=1 ${APP_IMAGE_NAME}
+  - docker run -i --name ${APP_CONTAINER_NAME} --link ${DB_CONTAINER_NAME}:db -e DB_HOSTNAME=${DB_HOSTNAME} -e CODE_SYNC_METHOD=${CODE_SYNC_METHOD} -e CODE_DRUSH_MAJOR_VERSION=${CODE_DRUSH_MAJOR_VERSION} -e CODE_GIT_CLONE_BRANCH=${CODE_GIT_CLONE_BRANCH} -e DRUPAL_SUBDIR=${DRUPAL_SUBDIR} -e DRUPAL_PROFILE=${DRUPAL_PROFILE} -e BUILD_TEST=1 ${APP_IMAGE_NAME}
