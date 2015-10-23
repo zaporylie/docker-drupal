@@ -11,7 +11,7 @@ testNginxAccessibleOnPort80()
 testXGenerator()
 {
 
-  rows=$(curl -I http://localhost:80 | grep 'Drupal' | wc -l)
+  rows=$(curl -I http://localhost:80 | grep "X-Generator" | grep "Drupal" | wc -l)
 
   assertEquals "X-Generator is not a Drupal" 1 $rows
 }

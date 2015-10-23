@@ -9,10 +9,17 @@ env:
     - APP_CONTAINER_NAME=drupal
     - DB_CONTAINER_NAME=mysql
     - DB_VERSION=5.5
+    - CODE_SYNC_METHOD=auto
+    - CODE_DRUSH_MAJOR_VERSION=8
   matrix:
+    # Try local database.
     - DB_HOSTNAME=
-    - DB_HOSTNAME=db
-    - DB_HOSTNAME=db DB_VERSION=5.6
+    # Try different version of mysql.
+    - DB_VERSION=5.6
+    # Try clone git repo.
+    - CODE_SYNC_METHOD=git
+    # Try Drupal 7.
+    - CODE_DRUSH_MAJOR_VERSION=7
 
 script:
   # Show version of Docker used to build image and run container.
@@ -26,4 +33,4 @@ script:
   # Show all container.
   - docker ps -a
   # Run container in test mode.
-  - docker run -i --name ${APP_CONTAINER_NAME} --link ${DB_CONTAINER_NAME}:${DB_HOSTNAME} -e DB_HOSTNAME=${DB_HOSTNAME} -e BUILD_TEST=1 ${APP_IMAGE_NAME}
+  - docker run -i --name ${APP_CONTAINER_NAME} --link ${DB_CONTAINER_NAME}:db -e CODE_SYNC_METHOD=${CODE_SYNC_METHOD} -e CODE_DRUSH_MAJOR_VERSION=${CODE_DRUSH_MAJOR_VERSION} -e BUILD_TEST=1 ${APP_IMAGE_NAME}
