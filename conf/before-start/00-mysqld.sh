@@ -13,11 +13,11 @@ WaitForMySQL ()
     fi
     echo "=> Waiting for confirmation of MySQL service startup, trying ${i}/${LOOP_LIMIT} ..."
     sleep 1
-    if [ -z "${DB_HOSTNAME}" ]; then
-      echo "Internal";
+    if [ "$(cat /etc/hosts | grep ${DB_HOSTNAME} | wc -l)" == "0" ] || [ "${DB_HOSTNAME}" == "localhost" ]; then
+      echo "==> Internal";
       mysql -uroot -e ";" > /dev/null 2>&1 && break
     else
-      echo "External";
+      echo "=> External";
       mysql -h${DB_HOSTNAME} -p${DB_ENV_MYSQL_ROOT_PASSWORD}  -e ";" > /dev/null 2>&1 && break
     fi
   done
@@ -29,7 +29,7 @@ StartMySQL ()
 }
 
 # Check first if user linked mysql container, if not - run mysql here.
-if [ "$( cat /etc/hosts | grep ${DB_HOSTNAME} | wc -l)" == "0" ] || [ "${DB_HOSTNAME}" == "localhost" ]; then
+if [ "$(cat /etc/hosts | grep ${DB_HOSTNAME} | wc -l)" == "0" ] || [ "${DB_HOSTNAME}" == "localhost" ]; then
 
   echo "=> No mysql container has been linked"
   echo "=> Starting MySQL ..."
@@ -38,15 +38,15 @@ if [ "$( cat /etc/hosts | grep ${DB_HOSTNAME} | wc -l)" == "0" ] || [ "${DB_HOST
   WaitForMySQL
 
   echo "=> Setting environmental variables"
-  DB_HOSTNAME=localhost
-  DB_PORT_3306_TCP_PROTO=tcp
-  DB_PORT_3306_TCP_PORT=3306
-  DB_PORT_3306_TCP_ADDR=127.0.0.1
-  DB_PORT=tcp://127.0.0.1:3306
+  export DB_HOSTNAME="localhost"
+  export DB_PORT_3306_TCP_PROTO="tcp"
+  export DB_PORT_3306_TCP_PORT="3306"
+  export DB_PORT_3306_TCP_ADDR="127.0.0.1"
+  export DB_PORT="tcp://127.0.0.1:3306"
 
   if [ -z "${DB_ENV_MYSQL_ROOT_PASSWORD}" ]; then
     echo "=> Changing password"
-    DB_ENV_MYSQL_ROOT_PASSWORD=`pwgen -c -n -1 12`
+    export DB_ENV_MYSQL_ROOT_PASSWORD="`pwgen -c -n -1 12`"
     mysqladmin -u root password ${DB_ENV_MYSQL_ROOT_PASSWORD}
   fi
 else
