@@ -30,7 +30,7 @@ if [[ -d /root/conf/after-start ]]; then
 fi
 
 
-if [[ -z "${TEST_BUILD}" ]]; then
+if [[ ! -z "${TEST_BUILD}" ]]; then
   # Run tests.
   echo "> TESTS"
   REQUIREMENTS="/usr/bin/shunit2 /bin/nc"
