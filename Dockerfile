@@ -25,7 +25,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
     pwgen \
   && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-RUN cd /home \
+RUN echo "time" \
  && composer global require drush/drush:dev-master \
  && echo 'export PATH="$HOME/.composer/vendor/bin:$PATH"' >> ~/.bashrc
 
