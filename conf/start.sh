@@ -1,8 +1,9 @@
 #!/bin/sh
 
-if [[ -d /root/conf/before-install ]]; then
-  echo "> BEFORE INSTALL"
-  FILES=/root/conf/before-install/*
+# Before code sync.
+if [[ -d /root/conf/sync-code-before ]]; then
+  echo "> BEFORE CODE SYNC"
+  FILES=/root/conf/sync-code-before/*
   for f in $FILES
   do
     echo "=> Attaching: $f"
@@ -41,9 +42,36 @@ else
   fi
 fi
 
-if [[ -d /root/conf/before-install ]]; then
-  echo "> AFTER INSTALL"
-  FILES=/root/conf/after-install/*
+# After code sync.
+if [[ -d /root/conf/sync-code-after ]]; then
+  echo "> AFTER CODE SYNC"
+  FILES=/root/conf/sync-code-after/*
+  for f in $FILES
+  do
+    echo "=> Attaching: $f"
+    source $f
+  done
+fi
+
+# Before DB sync.
+if [[ -d /root/conf/sync-db-before ]]; then
+  echo "> BEFORE DB SYNC"
+  FILES=/root/conf/sync-db-before/*
+  for f in $FILES
+  do
+    echo "=> Attaching: $f"
+    source $f
+  done
+fi
+
+# todo: Sync it if there is any existing datasource.
+echo "> DB SYNC"
+
+
+# After DB sync.
+if [[ -d /root/conf/sync-db-after ]]; then
+  echo "> AFTER DB SYNC"
+  FILES=/root/conf/sync-db-after/*
   for f in $FILES
   do
     echo "=> Attaching: $f"
