@@ -5,5 +5,4 @@ if [ -z "${SSH_PASSWORD}" ]; then
   echo "==> SSH password: ${SSH_PASSWORD}"
 fi
 
-
 echo "root:${SSH_PASSWORD}" | chpasswd

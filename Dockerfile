@@ -25,7 +25,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
     pwgen \
   && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-RUN composer global require drush/drush:dev-master \
+RUN echo 'efuwyg' && composer global require drush/drush:dev-master \
  && echo 'export PATH="$HOME/.composer/vendor/bin:$PATH"' >> ~/.bashrc
 
 COPY ./conf /root/conf/
@@ -54,19 +54,20 @@ RUN sed -i "s/variables_order.*/variables_order = \"EGPCS\"/g" /etc/php5/fpm/php
 ENV DRUPAL_PROFILE=minimal \
  DRUPAL_SUBDIR=default
 
-ENV DB_SYNC_METHOD=auto
-ENV DB_HOSTNAME=db \
- DB_USER=drupal \
- DB_PASSWORD=drupal \
- DB_NAME=drupal
-
 ENV CODE_SYNC_METHOD=auto \
  CODE_SYNC_FOLDER=/app/drupal
 ENV CODE_DRUSH_MAJOR_VERSION=8
 ENV CODE_GIT_CLONE_URL=http://git.drupal.org/project/drupal.git \
  CODE_GIT_CLONE_BRANCH=8.0.x \
  CODE_GIT_CLONE_DEPTH=1 \
- CODE_GIT_CLONE_SHA=HEAD
+ CODE_GIT_SHA=HEAD
+
+ENV DB_SYNC_METHOD=auto \
+ DB_SYNC_FILE=/app/backup/backup.sql
+ENV DB_HOSTNAME=db \
+ DB_USER=drupal \
+ DB_PASSWORD=drupal \
+ DB_NAME=drupal
 
 ENV TEST_BUILD= \
  TEST_DRUPAL=
