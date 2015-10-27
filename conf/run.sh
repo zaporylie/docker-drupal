@@ -47,6 +47,7 @@ if [[ ! -z "${TEST_BUILD}" ]]; then
   sleep 8s
 
   # Take all tests and run it one by one.
+  chmod -R u+x /root/conf/tests
   FILES=/root/conf/tests/*
   for f in $FILES
   do
