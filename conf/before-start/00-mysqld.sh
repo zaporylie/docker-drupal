@@ -14,10 +14,8 @@ WaitForMySQL ()
     echo "=> Waiting for confirmation of MySQL service startup, trying ${i}/${LOOP_LIMIT} ..."
     sleep 1
     if [ "$(cat /etc/hosts | grep ${DB_HOSTNAME} | wc -l)" == "0" ] || [ "${DB_HOSTNAME}" == "localhost" ]; then
-      echo "==> Internal";
       mysql -uroot -e ";" > /dev/null 2>&1 && break
     else
-      echo "=> External";
       mysql -h${DB_HOSTNAME} -p${DB_ENV_MYSQL_ROOT_PASSWORD}  -e ";" > /dev/null 2>&1 && break
     fi
   done

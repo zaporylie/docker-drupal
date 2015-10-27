@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Before code sync.
-if [[ -d /root/conf/sync-code-before ]]; then
+if [[ -d /root/conf/sync-code-before ]] && [ "$(ls -A /root/conf/sync-code-before)" ]; then
   echo "> BEFORE CODE SYNC"
   FILES=/root/conf/sync-code-before/*
   for f in $FILES
@@ -43,7 +43,7 @@ else
 fi
 
 # After code sync.
-if [[ -d /root/conf/sync-code-after ]]; then
+if [[ -d /root/conf/sync-code-after ]] && [ "$(ls -A /root/conf/sync-code-after)" ]; then
   echo "> AFTER CODE SYNC"
   FILES=/root/conf/sync-code-after/*
   for f in $FILES
@@ -54,7 +54,7 @@ if [[ -d /root/conf/sync-code-after ]]; then
 fi
 
 # Before DB sync.
-if [[ -d /root/conf/sync-db-before ]]; then
+if [[ -d /root/conf/sync-db-before ]] && [ "$(ls -A /root/conf/sync-db-before)" ]; then
   echo "> BEFORE DB SYNC"
   FILES=/root/conf/sync-db-before/*
   for f in $FILES
@@ -66,10 +66,32 @@ fi
 
 # todo: Sync it if there is any existing datasource.
 echo "> DB SYNC"
-
+# - db sync (DB_SYNC_METHOD)
+#   - if none, do nothing
+#   - if auto:
+#   - if file, check for .sql file in predefined location
+#   - if drush, use sql-sync from one level above given level
+#
+if [ "${DB_SYNC_METHOD}" = "auto" ]; then
+  if [ -f "/app/output/dump.sql" ]; then
+    # Use file.
+    DB_SYNC_METHOD="file"
+  elif [ ! -z "${DB_SYNC_DRUSH_FROM}" ] && [ "$(drush @${DB_SYNC_DRUSH_FROM} st | grep 'Connected' | wc -l)" == "1" ]]; then
+    # Use drush.
+    DB_SYNC_METHOD="drush"
+  else
+    # Do nothing.
+    DB_SYNC_METHOD=""
+  fi
+fi
+if [ -z "${DB_SYNC_METHOD}"]; then
+  echo "==> Skip db sync."
+else
+  source /root/conf/code_sync/${DB_SYNC}.sh
+fi
 
 # After DB sync.
-if [[ -d /root/conf/sync-db-after ]]; then
+if [[ -d /root/conf/sync-db-after ]] && [ "$(ls -A /root/conf/sync-db-after)" ]; then
   echo "> AFTER DB SYNC"
   FILES=/root/conf/sync-db-after/*
   for f in $FILES
