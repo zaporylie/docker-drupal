@@ -51,6 +51,12 @@ if [[ ! -z "${TEST_BUILD}" ]]; then
   for f in $FILES
   do
     echo "=> Attaching: $f"
+
+    if [ ! -x $f ]; then
+      echo "File $f is not executable."
+      exit 1
+    fi
+
     $f
   done
 else
